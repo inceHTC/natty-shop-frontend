@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { API_URL } from "../config";
+import { useLocation } from "react-router-dom";
 
 import ProfileSidebar from "../components/profile/ProfileSidebar";
 import ProfileInfo from "../components/profile/ProfileInfo";
@@ -16,11 +17,19 @@ export default function Profile({
   const token = localStorage.getItem("token");
 
   const [activeTab, setActiveTab] = useState("info");
+  const location = useLocation();
 
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
   const [addresses, setAddresses] = useState([]);
   const [favorites, setFavorites] = useState([]);
+
+useEffect(() => {
+  if (location.state?.tab) {
+    setActiveTab(location.state.tab);
+    window.history.replaceState({}, document.title);
+  }
+}, [location.state]);
 
   useEffect(() => {
     fetch(`${API_URL}/profile`, {
