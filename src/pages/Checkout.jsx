@@ -158,6 +158,20 @@ const handleOrder = async () => {
           </h2>
         </div>
         <div className="p-6 space-y-3">
+        {addresses.length === 0 && (
+  <div className="p-6 rounded-xl border border-dashed text-center">
+    <p className="text-slate-600 mb-4">
+      Kayıtlı adresiniz bulunmuyor.
+    </p>
+    <Link
+      to="/hesabim/adresler"
+      className="inline-block px-6 py-3 rounded-xl bg-black text-white font-medium"
+    >
+      Adres Ekle
+    </Link>
+  </div>
+)}
+
           {addresses.map((a) => (
             <label
               key={a.id}

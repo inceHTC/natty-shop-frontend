@@ -81,6 +81,7 @@ export default function Auth({ user, setUser }) {
 
   return (
     <div className="page-container py-12 md:py-16 flex justify-center">
+      
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl border border-[var(--color-border)] shadow-lg overflow-hidden">
           <div className="px-6 py-5 border-b border-[var(--color-border)] bg-slate-50/50">
