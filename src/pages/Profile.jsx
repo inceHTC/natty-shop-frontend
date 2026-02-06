@@ -71,7 +71,7 @@ export default function Profile({
       </h1>
 
       {/* 🔥 KRİTİK DÜZELTME */}
-     <div className="flex flex-col md:flex-row gap-6 md:gap-10">
+   <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
 
         
         {/* Sidebar */}
