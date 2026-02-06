@@ -16,7 +16,8 @@ const MENU = [
 
 export default function ProfileSidebar({ active, onChange }) {
   return (
-    <aside className="w-64 shrink-0">
+    <aside className="w-full md:w-64 shrink-0">
+
       <nav className="bg-white rounded-2xl border shadow-sm overflow-hidden sticky top-24">
         {MENU.map((item) => (
           <button

@@ -15,22 +15,23 @@ export default function Profile({
   toggleFavorite,
 }) {
   const token = localStorage.getItem("token");
-
-  const [activeTab, setActiveTab] = useState("info");
   const location = useLocation();
 
+  const [activeTab, setActiveTab] = useState("info");
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
   const [addresses, setAddresses] = useState([]);
   const [favorites, setFavorites] = useState([]);
 
-useEffect(() => {
-  if (location.state?.tab) {
-    setActiveTab(location.state.tab);
-    window.history.replaceState({}, document.title);
-  }
-}, [location.state]);
+  // 🔹 Dış linkten tab ile gelinirse
+  useEffect(() => {
+    if (location.state?.tab) {
+      setActiveTab(location.state.tab);
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
+  // 🔹 Profil verileri
   useEffect(() => {
     fetch(`${API_URL}/profile`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -69,12 +70,23 @@ useEffect(() => {
         Hesabım
       </h1>
 
-      <div className="flex gap-10">
-        <ProfileSidebar active={activeTab} onChange={setActiveTab} />
+      {/* 🔥 KRİTİK DÜZELTME */}
+     <div className="flex flex-col md:flex-row gap-6 md:gap-10">
 
-        <div className="flex-1">
-          {activeTab === "info" && <ProfileInfo user={user} setUser={setUser} />}
-          {activeTab === "orders" && <ProfileOrders orders={orders} />}
+        
+        {/* Sidebar */}
+        <div className="w-full lg:w-[280px] shrink-0">
+          <ProfileSidebar active={activeTab} onChange={setActiveTab} />
+        </div>
+
+        {/* Content */}
+        <div className="w-full flex-1 mt-4 lg:mt-0">
+          {activeTab === "info" && (
+            <ProfileInfo user={user} setUser={setUser} />
+          )}
+          {activeTab === "orders" && (
+            <ProfileOrders orders={orders} />
+          )}
           {activeTab === "addresses" && (
             <ProfileAddresses
               addresses={addresses}
