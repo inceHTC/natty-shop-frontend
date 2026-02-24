@@ -38,23 +38,14 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Headings – optional serif */
+/* Headings – serif (Playfair Display from Google Fonts) */
 .font-serif,
 .brand-logo {
-  font-family: "Playfair Display", "Bongita", Georgia, serif;
+  font-family: "Playfair Display", Georgia, serif;
   letter-spacing: 0.02em;
 }
 
-@font-face {
-  font-family: "Bongita";
-  src: url("/fonts/Bongita.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 .brand-logo {
-  font-family: "Bongita", "Playfair Display", serif;
   letter-spacing: 0.06em;
 }
 

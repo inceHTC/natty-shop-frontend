@@ -28,7 +28,17 @@ import Gizlilik from "./pages/Gizlilik";
 import Cantalar from "./pages/Cantalar";
 import YeniUrunler from "./pages/YeniUrunler";
 import OneCikanUrunler from "./pages/OneCikanUrunler";
+import { jwtDecode } from "jwt-decode";
 import { API_URL } from "./config";
+
+function isTokenExpired(token) {
+  try {
+    const { exp } = jwtDecode(token);
+    return !exp || exp * 1000 < Date.now();
+  } catch {
+    return true;
+  }
+}
 
 function App() {
   const [cart, setCart] = useState(() => {
@@ -39,7 +49,13 @@ function App() {
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     const token = localStorage.getItem("token");
-    return storedUser && token ? JSON.parse(storedUser) : null;
+    if (!storedUser || !token) return null;
+    if (isTokenExpired(token)) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      return null;
+    }
+    return JSON.parse(storedUser);
   });
 
   const [toast, setToast] = useState({
@@ -60,7 +76,12 @@ function App() {
   ======================= */
   const fetchFavorites = useCallback(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
+    if (!token || isTokenExpired(token)) {
+      if (token) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setUser(null);
+      }
       setFavoriteIds(new Set());
       return;
     }
