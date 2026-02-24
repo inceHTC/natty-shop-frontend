@@ -323,7 +323,17 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/products" element={<ProductList />} />
+        <Route
+          path="/products"
+          element={
+            <ProductList
+              addToCart={addToCartWithToast}
+              favoriteIds={favoriteIds}
+              toggleFavorite={toggleFavorite}
+              user={user}
+            />
+          }
+        />
         <Route
           path="/admin"
           element={
