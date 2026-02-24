@@ -28,17 +28,8 @@ import Gizlilik from "./pages/Gizlilik";
 import Cantalar from "./pages/Cantalar";
 import YeniUrunler from "./pages/YeniUrunler";
 import OneCikanUrunler from "./pages/OneCikanUrunler";
-import { jwtDecode } from "jwt-decode";
 import { API_URL } from "./config";
-
-function isTokenExpired(token) {
-  try {
-    const { exp } = jwtDecode(token);
-    return !exp || exp * 1000 < Date.now();
-  } catch {
-    return true;
-  }
-}
+import { isTokenExpired } from "./utils/auth";
 
 function App() {
   const [cart, setCart] = useState(() => {

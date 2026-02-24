@@ -3,28 +3,31 @@ import { Link } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import BackLink from "../components/BackLink";
 import { API_URL } from "../config";
+import { getValidToken, clearAuth } from "../utils/auth";
 
 export default function Favorites({ addToCart, toggleFavorite }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("token");
-
-  const fetchFavorites = async () => {
-    try {
-      const res = await fetch(`${API_URL}/favorites`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      setProducts(Array.isArray(data) ? data : []);
-    } catch {
-      setProducts([]);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
-    fetchFavorites();
+    const token = getValidToken();
+    if (!token) {
+      clearAuth();
+      return;
+    }
+    fetch(`${API_URL}/favorites`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        if (res.status === 401) {
+          clearAuth();
+          return [];
+        }
+        return res.json();
+      })
+      .then((data) => setProducts(Array.isArray(data) ? data : []))
+      .catch(() => setProducts([]))
+      .finally(() => setLoading(false));
   }, []);
 
   const removeFavorite = (productId) => {

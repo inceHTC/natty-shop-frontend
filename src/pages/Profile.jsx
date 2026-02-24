@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { API_URL } from "../config";
 import { useLocation } from "react-router-dom";
+import { getValidToken, clearAuth } from "../utils/auth";
 
 import ProfileSidebar from "../components/profile/ProfileSidebar";
 import ProfileInfo from "../components/profile/ProfileInfo";
@@ -31,34 +32,42 @@ export default function Profile({
     }
   }, [location.state]);
 
-  // 🔹 Profil verileri
+  // 🔹 Profil verileri – sadece geçerli token varsa istek at (401 konsol hatasını önler)
   useEffect(() => {
-    fetch(`${API_URL}/profile`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((r) => r.json())
-      .then(setUser)
+    const validToken = getValidToken();
+    if (!validToken) {
+      clearAuth();
+      return;
+    }
+
+    const authHeaders = { Authorization: `Bearer ${validToken}` };
+
+    const handleRes = (res) => {
+      if (res.status === 401) {
+        clearAuth();
+        return [];
+      }
+      return res.json();
+    };
+
+    fetch(`${API_URL}/profile`, { headers: authHeaders })
+      .then(handleRes)
+      .then((data) => setUser(Array.isArray(data) ? null : data))
       .catch(() => setUser(null));
 
-    fetch(`${API_URL}/orders/my`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((r) => r.json())
-      .then(setOrders)
+    fetch(`${API_URL}/orders/my`, { headers: authHeaders })
+      .then(handleRes)
+      .then((data) => setOrders(Array.isArray(data) ? data : []))
       .catch(() => setOrders([]));
 
-    fetch(`${API_URL}/addresses`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((r) => r.json())
-      .then(setAddresses)
+    fetch(`${API_URL}/addresses`, { headers: authHeaders })
+      .then(handleRes)
+      .then((data) => setAddresses(Array.isArray(data) ? data : []))
       .catch(() => setAddresses([]));
 
-    fetch(`${API_URL}/favorites`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((r) => r.json())
-      .then(setFavorites)
+    fetch(`${API_URL}/favorites`, { headers: authHeaders })
+      .then(handleRes)
+      .then((data) => setFavorites(Array.isArray(data) ? data : []))
       .catch(() => setFavorites([]));
   }, [token]);
 
