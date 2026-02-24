@@ -50,6 +50,7 @@ body {
   src: url("/fonts/Bongita.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 .brand-logo {

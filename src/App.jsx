@@ -68,7 +68,16 @@ function App() {
     fetch(`${API_URL}/favorites`, {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 401) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          setUser(null);
+          setFavoriteIds(new Set());
+          return [];
+        }
+        return res.json();
+      })
       .then((data) => {
         const list = Array.isArray(data) ? data : [];
         setFavoriteIds(new Set(list.map((p) => p.id)));
