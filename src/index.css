@@ -47,7 +47,7 @@ body {
 
 @font-face {
   font-family: "Bongita";
-  src: url("./assets/fonts/Bongita.otf") format("opentype");
+  src: url("/fonts/Bongita.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
 }
