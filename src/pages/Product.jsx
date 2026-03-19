@@ -8,10 +8,22 @@ import { Check, Truck, RefreshCcw, ShieldCheck } from "lucide-react";
 
 function getImageUrl(url, gender = "kadin") {
   if (!url) return "";
-  const base = `${API_URL}/images`;
-  return url.includes("/") ? `${base}/${url}` : `${base}/${gender}/${url}`;
-}
 
+  // 🔥 zaten /images ile başlıyorsa direkt kullan
+  if (url.startsWith("/images")) {
+    return `${API_URL}${url}`;
+  }
+
+  const base = `${API_URL}/images`;
+
+  // erkek/xxx.png gibi ise
+  if (url.includes("/")) {
+    return `${base}/${url}`;
+  }
+
+  // sadece filename ise
+  return `${base}/${gender}/${url}`;
+}
 export default function Product({
   addToCart,
   favoriteIds,

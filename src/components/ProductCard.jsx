@@ -14,11 +14,17 @@ function imageUrl(product) {
   const main = product?.images?.find((i) => i.isMain) || product?.images?.[0];
   const fn = main?.url || product?.image;
   if (!fn) return "";
+
+  // 🔥 Eğer zaten /images ile başlıyorsa direkt kullan
+  if (fn.startsWith("/images")) {
+    return `${API_URL}${fn}`;
+  }
+
   const gender = product?.gender || "kadin";
   const path = fn.includes("/") ? fn : `${gender}/${fn}`;
+
   return `${API_URL}/images/${path}`;
 }
-
 export default function ProductCard({
   product,
   addToCart,
